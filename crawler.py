@@ -1,4 +1,5 @@
 import time
+import json
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 
@@ -88,10 +89,10 @@ def crawl_site_selenium(driver, start_url, max_depth, max_pages, visited=None):
                 # Respect max_pages limit
                 if len(visited) < max_pages and next_url not in visited:
                     crawl_site_selenium(
-                        driver, 
-                        next_url, 
-                        max_depth - 1, 
-                        max_pages, 
+                        driver,
+                        next_url,
+                        max_depth - 1,
+                        max_pages,
                         visited
                     )
 
@@ -115,10 +116,10 @@ def main():
     for url in seed_urls:
         # Start crawling each seed URL
         crawled_data = crawl_site_selenium(
-            driver=driver, 
-            start_url=url, 
-            max_depth=1000, 
-            max_pages=1000, 
+            driver=driver,
+            start_url=url,
+            max_depth=1000,
+            max_pages=1000,
             visited=None
         )
         # Merge results into a single dictionary
@@ -127,10 +128,12 @@ def main():
     # Clean up Selenium
     driver.quit()
 
-    # Display results
-    print("\n--- CRAWL RESULTS ---")
-    for i, (page_url, text_data) in enumerate(all_scraped.items(), start=1):
-        print(f"{i}. [{page_url}] - {len(text_data)} chars")
+    # Write results to a JSON file
+    output_filename = "crawl_results.json"
+    with open(output_filename, "w", encoding="utf-8") as f:
+        json.dump(all_scraped, f, ensure_ascii=False, indent=2)
+    
+    print(f"\nSaved crawl results to '{output_filename}'.")
 
 if __name__ == "__main__":
     main()
