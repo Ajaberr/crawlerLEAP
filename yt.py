@@ -28,13 +28,11 @@ for video in videos:
     # Convert to Weaviate format
     weaviate_object = {
         "class": "YouTubeVideo",
-        "properties": {
-            "title": title,
-            "videoId": video_id,
-            "url": url,
-            "publishedAt": published_at,
-            "transcript": transcript
-        }
+        "title": title,
+        "videoId": video_id,
+        "url": url,
+        "transcript": transcript
+
     }
 
     video_data.append(weaviate_object)
@@ -45,3 +43,8 @@ with open(json_path, "w", encoding="utf-8") as f:
     json.dump(video_data, f, indent=4)
 
 print(f"✅ Data saved to {json_path}")
+
+
+#1 JSON for each youtube video.
+
+
